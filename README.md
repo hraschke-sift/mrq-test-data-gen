@@ -10,4 +10,4 @@ Entity type, environment, and number of entities must be passed each time. API k
 ## Usage
 
 ```bash
-sh ./mrq-test-data-gen.sh  -t entity_type -e environment -q number_of_entities -a api_key
+sh ./mrq-test-data-gen.sh  -t entity_type -e environment -q number_of_entities -k api_key
