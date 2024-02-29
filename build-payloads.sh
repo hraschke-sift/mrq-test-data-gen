@@ -52,7 +52,7 @@ order=$(cat <<EOF
   "\$browser": {
     "\$user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/98.0.4758.80 Safari/537.36"
   },
-  "\$user_id": "wfa_gke_decision_0428_1",
+  "\$user_id": "mrqtest-payment-user-$uuid-$id",
   "\$session_id": "d2a589c7-69cd-41bc-93d7-4c4da47afwww_1",
   "\$ip": "78.43.219.8",
   "\$type": "\$create_order",
