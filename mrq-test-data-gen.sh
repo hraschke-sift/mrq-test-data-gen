@@ -8,6 +8,7 @@ fi
 type=""
 env=""
 qty="1"
+uuid=$(uuidgen)
 
 print_help() {
   echo "Usage: $0 [-t type] [-e env] [-q qty] [-h]"
@@ -91,7 +92,7 @@ fi
 for (( id=1; id<=qty; id++ ))
 do
   echo "creating $type with id $id"
-  sh ./make-request.sh "$env" "$type" "$id"
+  sh ./make-request.sh "$env" "$type" "$uuid-$id"
   if [ $? -ne 0 ]; then
     echo "Error: ./make-request.sh failed on iteration $id"
     exit 1

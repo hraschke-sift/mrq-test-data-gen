@@ -4,14 +4,13 @@ source ./env.sh
 
 type=$1
 id=${2:-1}
-uuid=$(uuidgen)
 
 content=$(cat <<EOF
 {
   "\$type": "\$create_content",
   "\$api_key": "$API_KEY",
-  "\$user_id": "mrqtest-cont-user-$uuid-$id",
-  "\$content_id": "mrqtest-content-$uuid-$id",
+  "\$user_id": "mrqtest-cont-user-$id",
+  "\$content_id": "mrqtest-content-$id",
   "\$comment": {
     "\$body": "some text"
   },
@@ -26,16 +25,16 @@ session=$(cat <<EOF
 {
   "\$type": "\$login",
   "\$api_key": "$API_KEY",
-  "\$user_id": "mrqtest-ato-user-$uuid-$id",
+  "\$user_id": "mrqtest-ato-user-$id",
   "\$login_status": "\$success",
-  "\$session_id": "mrqest-session-$uuid-$id"
+  "\$session_id": "mrqest-session-$id"
 }
 EOF
 )
 
 order=$(cat <<EOF
 {
-  "\$order_id": "mrq-order-$uuid-$id",
+  "\$order_id": "mrq-order-$id",
   "\$user_email": "mrg11@gmail.com",
   "\$amount": 33,
   "\$currency_code": "EUR",
@@ -52,7 +51,7 @@ order=$(cat <<EOF
   "\$browser": {
     "\$user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/98.0.4758.80 Safari/537.36"
   },
-  "\$user_id": "mrqtest-payment-user-$uuid-$id",
+  "\$user_id": "mrqtest-payment-user-$id",
   "\$session_id": "d2a589c7-69cd-41bc-93d7-4c4da47afwww_1",
   "\$ip": "78.43.219.8",
   "\$type": "\$create_order",
