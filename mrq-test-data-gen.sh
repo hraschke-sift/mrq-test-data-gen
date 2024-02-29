@@ -11,19 +11,23 @@ qty="1"
 uuid=$(uuidgen)
 
 print_help() {
-  echo "Usage: $0 [-t type] [-e env] [-q qty] [-h]"
+  echo "Usage: $0 [-t type] [-e env] [-q qty] [-k api_key] [-a] [-h]"
   echo
   echo "Options:"
   echo "  -t    Set the type"
+  echo "  -a    Run for all types"
   echo "  -e    Set the environment (expr, stg1, prod)"
   echo "  -q    Set the quantity (defaults to 1 if not set)"
-  echo "  -a    Set the API key for the customer (must be provided on first run at least)"
+  echo "  -k    Set the API key for the customer (must be provided on first run at least)"
   echo "  -h    Print this help message"
   exit 1
 }
 
-while getopts "t:e:q:a:h" opt; do
+while getopts "t:e:q:k:ah" opt; do
   case ${opt} in
+    a)
+      type="all"
+      ;;
     t )
       type=$OPTARG
       ;;
@@ -31,9 +35,10 @@ while getopts "t:e:q:a:h" opt; do
       env=$OPTARG
       ;;
     q )
+      echo "Setting quantity to $OPTARG"
       qty=$OPTARG
       ;;
-    a)
+    k)
       echo "Setting API key to $OPTARG"
       echo "export API_KEY=$OPTARG" > env.sh
       ;;
@@ -65,7 +70,7 @@ fi
 
 # define valid arguments
 valid_environments=("expr" "stg1" "prod")
-valid_types=("content" "user" "session" "order")
+valid_types=("content" "user" "session" "order" "all")
 
 # Function to check if a value is in an array
 contains() {
@@ -89,14 +94,33 @@ if ! contains "$type" "${valid_types[@]}"; then
   exit 1
 fi
 
-for (( id=1; id<=qty; id++ ))
-do
-  echo "creating $type with id $id"
-  sh ./make-request.sh "$env" "$type" "$uuid-$id"
-  if [ $? -ne 0 ]; then
-    echo "Error: ./make-request.sh failed on iteration $id"
-    exit 1
-  fi
-done
+execute_request() {
+  local type="$1"
+
+  for (( id=1; id<=qty; id++ ))
+  do
+    echo "creating $type with id $id"
+    sh ./make-request.sh "$env" "$type" "$uuid-$id"
+    if [ $? -ne 0 ]; then
+      echo "Error: request failed on iteration $id"
+      exit 1
+    fi
+  done
+
+  echo "Successfully created $qty items."
+}
+
+# if type is all, run for all types
+if [ "$type" == "all" ]; then
+  for t in "${valid_types[@]}"; do
+    execute_request "$t"
+  done
+  echo "Successfully created $qty events for all types."
+  exit 0
+fi
+
+# otherwise, run for the specified type
+execute_request "$type"
 
 echo "Successfully created $qty items."
+exit 0
