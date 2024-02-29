@@ -4,13 +4,14 @@ source ./env.sh
 
 type=$1
 id=${2:-1}
+uuid=$(uuidgen)
 
 content=$(cat <<EOF
 {
   "\$type": "\$create_content",
   "\$api_key": "$API_KEY",
-  "\$user_id": "mrqtest-cont-user-$id",
-  "\$content_id": "mrqtest-content-$id",
+  "\$user_id": "mrqtest-cont-user-$uuid-$id",
+  "\$content_id": "mrqtest-content-$uuid-$id",
   "\$comment": {
     "\$body": "some text"
   },
@@ -25,16 +26,16 @@ session=$(cat <<EOF
 {
   "\$type": "\$login",
   "\$api_key": "$API_KEY",
-  "\$user_id": "mrqtest-ato-user-$id",
+  "\$user_id": "mrqtest-ato-user-$uuid-$id",
   "\$login_status": "\$success",
-  "\$session_id": "mrqest-session-$id"
+  "\$session_id": "mrqest-session-$uuid-$id"
 }
 EOF
 )
 
 order=$(cat <<EOF
 {
-  "\$order_id": "mrq-order-$id",
+  "\$order_id": "mrq-order-$uuid-$id",
   "\$user_email": "mrg11@gmail.com",
   "\$amount": 33,
   "\$currency_code": "EUR",
