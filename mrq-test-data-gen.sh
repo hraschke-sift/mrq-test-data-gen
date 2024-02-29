@@ -121,6 +121,4 @@ fi
 
 # otherwise, run for the specified type
 execute_request "$type"
-
-echo "Successfully created $qty items."
 exit 0
